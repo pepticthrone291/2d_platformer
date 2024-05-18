@@ -12,7 +12,7 @@ ContextUPtr Context::Create()
 
 void Context::ProcessInput(GLFWwindow* window) 
 {
-    const float cameraSpeed = 5.0f;
+    const float cameraSpeed = 2.0f;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         m_cameraPos += cameraSpeed * m_cameraFront;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -132,7 +132,7 @@ void Context::Render()
     model = glm::translate(model, glm::vec3(m_characterPos, 0.0f));
     model = glm::scale(model, glm::vec3(m_characterSize, 1.0f));
 
-    auto projection = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+    auto projection = glm::ortho(-400.0f, 400.0f, -300.0f, 300.0f, -1.0f, 1.0f);
 
     auto transform = projection * model;
     m_program->SetUniform("transform", transform);
