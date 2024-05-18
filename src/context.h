@@ -37,8 +37,8 @@ private:
     glm::vec3 m_cameraPos {glm::vec3(0.0f, 0.0f, 3.0f)};
     glm::vec3 m_cameraFront {glm::vec3(0.0f, 0.0f, -1.0f)};
     glm::vec3 m_cameraUp {glm::vec3(0.0f, 1.0f, 0.0f)};
-    glm::vec2 m_characterPos {glm::vec2(400.0f, 300.0f)};
-    glm::vec2 m_characterSize = {glm::vec2(200.0f, 200.0f)};
+    glm::vec2 m_characterPos {glm::vec2(0.0f, 0.0f)};
+    glm::vec2 m_characterSize = {glm::vec2(1.0f, 1.0f)};
 
     int m_width {WINDOW_WIDTH};
     int m_height {WINDOW_HEIGHT};

@@ -130,12 +130,9 @@ void Context::Render()
 
     auto model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(m_characterPos, 0.0f));
-    model = glm::translate(model, glm::vec3(0.5f * m_characterSize.x, 0.5f * m_characterSize.y, 0.0f));
-    model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::translate(model, glm::vec3(-0.5f * m_characterSize.x, -0.5f * m_characterSize.y, 0.0f));
     model = glm::scale(model, glm::vec3(m_characterSize, 1.0f));
 
-    auto projection = glm::ortho(0.0f, static_cast<float>(m_width), 0.0f, static_cast<float>(m_height), -1.0f, 1.0f);
+    auto projection = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
 
     auto transform = projection * model;
     m_program->SetUniform("transform", transform);
