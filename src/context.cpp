@@ -12,8 +12,7 @@ ContextUPtr Context::Create()
 
 void Context::ProcessInput(GLFWwindow* window) 
 {
-    if (!m_cameraControl) return;
-    const float cameraSpeed = 0.05f;
+    const float cameraSpeed = 5.0f;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         m_cameraPos += cameraSpeed * m_cameraFront;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -21,22 +20,17 @@ void Context::ProcessInput(GLFWwindow* window)
 
     auto cameraRight = glm::normalize(glm::cross(m_cameraUp, -m_cameraFront));
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        m_cameraPos += cameraSpeed * cameraRight;
+        m_characterPos.x += cameraSpeed;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        m_cameraPos -= cameraSpeed * cameraRight;    
+        m_characterPos.x -= cameraSpeed;
+
+    
 
     auto cameraUp = glm::normalize(glm::cross(-m_cameraFront, cameraRight));
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
         m_cameraPos += cameraSpeed * cameraUp;
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
         m_cameraPos -= cameraSpeed * cameraUp;
-}
-
-void Context::Reshape(int width, int height)
-{
-    m_width = width;
-    m_height = height;
-    glViewport(0, 0, m_width, m_height);
 }
 
 void Context::MouseMove(double x, double y)
@@ -78,10 +72,10 @@ void Context::MouseButton(int button, int action, double x, double y)
 bool Context::Init()
 {
     float vertices[] = {
-        0.0f, 0.0f, 0.0f, 0.0f,
-        1.0f, 0.0f, 1.0f, 0.0f,
-        1.0f, 1.0f, 1.0f, 1.0f,
-        0.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -1.0f, 0.0f, 0.0f,
+        0.5f, -1.0f, 1.0f, 0.0f,
+        0.5f, 1.0f, 1.0f, 1.0f,
+        -0.5f, 1.0f, 0.0f, 1.0f,
     };
 
     uint32_t indices[] = {
@@ -110,41 +104,21 @@ bool Context::Init()
 
     glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
 
-    auto image = Image::Load("./image/container.jpg");
-    if (!image) 
-        return false;
-    SPDLOG_INFO("image: {}x{}, {} channels", image->GetWidth(), image->GetHeight(), image->GetChannelCount());
-
     // auto image = Image::Create(512, 512);
     // image->SetCheckImage(16, 16);
 
-    m_texture = Texture::CreateFromImage(image.get());  // get : raw pointer
-
-    auto image2 = Image::Load("./image/awesomeface.png");
-    m_texture2 = Texture::CreateFromImage(image2.get());
+    auto image = Image::Load("./image/mainCharacterDir2.png");
+    if (!image) 
+        return false;
+    SPDLOG_INFO("image: {}x{}, {} channels", image->GetWidth(), image->GetHeight(), image->GetChannelCount());
+    
+    m_texture = Texture::CreateFromImage(image.get());
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, m_texture->Get());
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, m_texture2->Get());
 
     m_program->Use();
     m_program->SetUniform("tex", 0);
-    m_program->SetUniform("tex2", 1);
-
-    glm::vec2 position = glm::vec2(300.0f, 400.0f);
-    glm::vec2 size = glm::vec2(100.0f, 100.0f);
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(position, 0.0f));
-    model = glm::translate(model, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.0f));
-    model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-    model = glm::translate(model, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.0f));
-    model = glm::scale(model, glm::vec3(size, 1.0f));
-
-    auto projection = glm::ortho(0.0f, static_cast<float>(m_width), 0.0f, static_cast<float>(m_height), -1.0f, 1.0f);
-    
-    auto transform = projection * model;
-    m_program->SetUniform("transform", transform);
 
     return true;
 }
@@ -153,6 +127,18 @@ void Context::Render()
 {   
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
+
+    auto model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(m_characterPos, 0.0f));
+    model = glm::translate(model, glm::vec3(0.5f * m_characterSize.x, 0.5f * m_characterSize.y, 0.0f));
+    model = glm::rotate(model, glm::radians(0.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::translate(model, glm::vec3(-0.5f * m_characterSize.x, -0.5f * m_characterSize.y, 0.0f));
+    model = glm::scale(model, glm::vec3(m_characterSize, 1.0f));
+
+    auto projection = glm::ortho(0.0f, static_cast<float>(m_width), 0.0f, static_cast<float>(m_height), -1.0f, 1.0f);
+
+    auto transform = projection * model;
+    m_program->SetUniform("transform", transform);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.13)
 
-set(PROJECT_NAME opengl_example)
+set(PROJECT_NAME 2d_platformer)
 set(CMAKE_CXX_STANDARD 17)
 
-set(WINDOW_NAME "OpenGL Example")
+set(WINDOW_NAME "2D Platformer")
 set(WINDOW_WIDTH 800)
 set(WINDOW_HEIGHT 600)
 
