@@ -35,7 +35,8 @@ void Texture::CreateTexture() {
     SetWrap(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
 }
 
-void Texture::SetTextureFromImage(const Image* image) {
+void Texture::SetTextureFromImage(const Image* image)
+{
     GLenum format = GL_RGBA;
     switch (image->GetChannelCount()) {
         default: break;

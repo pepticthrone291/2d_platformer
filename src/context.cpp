@@ -144,7 +144,7 @@ void Context::Render()
     model = glm::translate(model, glm::vec3(m_characterPos, 0.0f));
     model = glm::scale(model, glm::vec3(m_characterSize, 1.0f));
 
-    auto projection = glm::ortho(-800.0f, 800.0f, -450.0f, 450.0f, -1.0f, 1.0f);
+    auto projection = glm::ortho(-0.5f * (float)WINDOW_WIDTH, 0.5f * (float)WINDOW_WIDTH, -0.5f * (float)WINDOW_HEIGHT, 0.5f * (float)WINDOW_HEIGHT, -1.0f, 1.0f);
 
     auto transform = projection * model;
     m_program->SetUniform("transform", transform);

@@ -4,8 +4,8 @@ set(PROJECT_NAME 2d_platformer)
 set(CMAKE_CXX_STANDARD 17)
 
 set(WINDOW_NAME "2D Platformer")
-set(WINDOW_WIDTH 1600)
-set(WINDOW_HEIGHT 900)
+set(WINDOW_WIDTH 800)
+set(WINDOW_HEIGHT 600)
 
 project(${PROJECT_NAME})
 add_executable(${PROJECT_NAME} 
