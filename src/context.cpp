@@ -70,6 +70,11 @@ void Context::MouseButton(int button, int action, double x, double y)
     }
 }
 
+void Context::Update(float dt)
+{
+
+}
+
 bool Context::Init()
 {
     float vertices[] = {
@@ -139,7 +144,7 @@ void Context::Render()
     model = glm::translate(model, glm::vec3(m_characterPos, 0.0f));
     model = glm::scale(model, glm::vec3(m_characterSize, 1.0f));
 
-    auto projection = glm::ortho(-400.0f, 400.0f, -300.0f, 300.0f, -1.0f, 1.0f);
+    auto projection = glm::ortho(-800.0f, 800.0f, -450.0f, 450.0f, -1.0f, 1.0f);
 
     auto transform = projection * model;
     m_program->SetUniform("transform", transform);

@@ -8,6 +8,11 @@
 #include "vertex_layout.h"
 #include "texture.h"
 
+enum GameState
+{
+    GAME_ACTIVE, GAME_MENU, GAME_WIN
+};
+
 CLASS_PTR(Context)
 class Context
 {
@@ -15,9 +20,10 @@ public:
     static ContextUPtr Create();
     void Render();
     void ProcessInput(GLFWwindow *window);
-    void Reshape(int width, int height);
     void MouseMove(double x, double y);
     void MouseButton(int button, int action, double x, double y);
+    GameState State;
+    void Update(float dt);
 private:
     Context() {}
     bool Init();
