@@ -2,6 +2,8 @@
 
 #include "image.h"
 
+#include <imgui.h>
+
 ContextUPtr Context::Create()
 {
     auto context = ContextUPtr(new Context());
@@ -12,25 +14,24 @@ ContextUPtr Context::Create()
 
 void Context::ProcessInput(GLFWwindow* window) 
 {
-    const float cameraSpeed = 2.0f;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        m_cameraPos += cameraSpeed * m_cameraFront;
+        m_cameraPos += m_moveSpeed * m_cameraFront;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        m_cameraPos -= cameraSpeed * m_cameraFront;
+        m_cameraPos -= m_moveSpeed * m_cameraFront;
 
     auto cameraRight = glm::normalize(glm::cross(m_cameraUp, -m_cameraFront));
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        m_characterPos.x += cameraSpeed;
+        m_characterPos.x += m_moveSpeed;
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        m_characterPos.x -= cameraSpeed;
+        m_characterPos.x -= m_moveSpeed;
 
     
 
     auto cameraUp = glm::normalize(glm::cross(-m_cameraFront, cameraRight));
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-        m_cameraPos += cameraSpeed * cameraUp;
+        m_cameraPos += m_moveSpeed * cameraUp;
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-        m_cameraPos -= cameraSpeed * cameraUp;
+        m_cameraPos -= m_moveSpeed * cameraUp;
 }
 
 void Context::MouseMove(double x, double y)
@@ -125,6 +126,12 @@ bool Context::Init()
 
 void Context::Render()
 {   
+    if (ImGui::Begin("physical simulation test"))
+    {
+        ImGui::DragFloat("move speed", &m_moveSpeed, 0.02f, 0.0f, 50.0f);
+    }
+    ImGui::End();
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 

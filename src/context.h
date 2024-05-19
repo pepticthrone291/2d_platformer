@@ -27,7 +27,8 @@ private:
     BufferUPtr m_vertexBuffer;
     BufferUPtr m_indexBuffer;
     TextureUPtr m_texture;
-    TextureUPtr m_texture2;
+
+    float m_moveSpeed {2.0f};
 
     // camera parameter
     bool m_cameraControl {false};
