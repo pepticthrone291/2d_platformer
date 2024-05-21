@@ -64,6 +64,7 @@
         "vector": "cpp",
         "algorithm": "cpp",
         "format": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "xiosbase": "cpp"
     }
 }
